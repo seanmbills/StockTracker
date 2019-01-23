@@ -3,6 +3,8 @@
 ## written in python3 for now, due to some issues with authentication
 ##      on the nasdaq site when using Python2.7
 import pandas as pd
+from pandas_datareader import data, wb
+from datetime import datetime
 
 ## get all of the stock exchanges we wish to work with
 # NYSE
@@ -12,9 +14,20 @@ url_nasdaq = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&ex
 # AMEX
 url_amex = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download"
 
+
 ## for now we'll just use the NYSE
 df = pd.DataFrame.from_csv(url_nyse)
 
+## get all of the abbreviations for stocks on the nyse
 nyseStocksAbbrevs = df.index.tolist()
 
-print (nyseStocksAbbrevs)
+print(nyseStocksAbbrevs)
+
+## loop over stock abbreviations and get value from Yahoo
+## stock info via pandas' built-in web data stock function
+start = '2015-01-01'
+end = datetime.now()
+for abbrev in nyseStocksAbbrevs:
+    ticker = data.DataReader(abbrev, 'yahoo', start, end)
+    if ticker is not None:
+        print (ticker)
