@@ -6,6 +6,8 @@ import pandas as pd
 from pandas_datareader import data, wb
 from datetime import datetime
 from yahoo_fin import stock_info as si
+from threading import Thread
+from utils import *
 
 ## get all of the stock exchanges we wish to work with
 # NYSE
@@ -37,18 +39,21 @@ individualPurchases = {}
 ## keeps track of valuation of current stocks:
 currentTotalValuation = 0.0
 
-## loop over stock abbreviations and get value from Yahoo
-## stock info
-start = '2019-01-01'
-end = datetime.now()
+## track the running threads (each executing a different function for reading/
+##      updating values in our dictionary)
+threads = []
 
-for ticker in tickers:
-    try:
-        ## just want the live price of the stock (since we aren't including
-        ##      any predictive features in yet based on past performance)
-        value = si.get_live_price(ticker)
-        if value is not None:
-            currentValues[ticker] = value
-            # print (ticker + ": " + str(currentValues[ticker]))
-    except ValueError:
-        continue
+
+def main():
+    ## create threads to run each of the method that needs to check the current
+    ## valuation of stocks and update the current valuation of the user's
+    ## owned stocks
+    updateStockValueProcess = Thread(target=updateStockValuations, args=[tickers, currentValues])
+    updateStockValueProcess.start()
+    threads.append(updateStockValueProcess)
+    updateCurrentTotalValueProcess = Thread(target=updateCurrentTotalValuation, args=[currentValues, totalOwned, currentTotalValuation])
+    updateCurrentTotalValueProcess.start()
+    threads.append(updateCurrentTotalValueProcess)
+
+if __name__ == "__main__":
+    main()
