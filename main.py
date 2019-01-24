@@ -23,7 +23,17 @@ df = pd.DataFrame.from_csv(url_nyse)
 tickers = df.index.tolist()
 
 ## dictionary to track stock live stock price
+## Key: stock Val: current price
 currentValues = {}
+## dictionary to track current owned stock
+## Key: Stock Abbrev. Value: total # owned (across all purchase orders?)
+totalOwned = {}
+## dictionary to track individual purchases of a stock to price purchased at
+## Key: a dictionary of form:
+##      {Key: stock purchased
+##      Value: amount purchased in this purchase}
+## Value: price purchased at
+individualPurchases = {}
 
 ## loop over stock abbreviations and get value from Yahoo
 ## stock info
