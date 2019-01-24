@@ -5,6 +5,7 @@
 import pandas as pd
 from pandas_datareader import data, wb
 from datetime import datetime
+from yahoo_fin import stock_info as si
 
 ## get all of the stock exchanges we wish to work with
 # NYSE
@@ -21,13 +22,17 @@ df = pd.DataFrame.from_csv(url_nyse)
 ## get all of the abbreviations for stocks on the nyse
 nyseStocksAbbrevs = df.index.tolist()
 
-print(nyseStocksAbbrevs)
-
+# print(nyseStocksAbbrevs)
+tickers = si.tickers_nasdaq()
 ## loop over stock abbreviations and get value from Yahoo
 ## stock info via pandas' built-in web data stock function
-start = '2015-01-01'
+start = '2019-01-01'
 end = datetime.now()
-for abbrev in nyseStocksAbbrevs:
-    ticker = data.DataReader(abbrev, 'yahoo', start, end)
-    if ticker is not None:
-        print (ticker)
+
+for ticker in tickers:
+    try:
+        value = si.get_live_price(ticker)
+        if value is not None:
+            print (ticker + ": " + str(value))
+    except ValueError:
+        continue
