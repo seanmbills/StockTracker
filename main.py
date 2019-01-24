@@ -16,10 +16,10 @@ url_nasdaq = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&ex
 url_amex = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download"
 
 
-## for now we'll just use the NYSE
+## gets the NYSE stock company abbreviations
 df = pd.DataFrame.from_csv(url_nyse)
 
-## get all of the abbreviations for stocks on the nyse
+## reads data from the csv to a list format
 tickers = df.index.tolist()
 
 ## dictionary to track stock live stock price
@@ -34,6 +34,8 @@ totalOwned = {}
 ##      Value: amount purchased in this purchase}
 ## Value: price purchased at
 individualPurchases = {}
+## keeps track of valuation of current stocks:
+currentTotalValuation = 0.0
 
 ## loop over stock abbreviations and get value from Yahoo
 ## stock info
