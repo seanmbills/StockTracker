@@ -20,19 +20,23 @@ url_amex = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exch
 df = pd.DataFrame.from_csv(url_nyse)
 
 ## get all of the abbreviations for stocks on the nyse
-nyseStocksAbbrevs = df.index.tolist()
+tickers = df.index.tolist()
 
-# print(nyseStocksAbbrevs)
-tickers = si.tickers_nasdaq()
+## dictionary to track stock live stock price
+currentValues = {}
+
 ## loop over stock abbreviations and get value from Yahoo
-## stock info via pandas' built-in web data stock function
+## stock info
 start = '2019-01-01'
 end = datetime.now()
 
 for ticker in tickers:
     try:
+        ## just want the live price of the stock (since we aren't including
+        ##      any predictive features in yet based on past performance)
         value = si.get_live_price(ticker)
         if value is not None:
-            print (ticker + ": " + str(value))
+            currentValues[ticker] = value
+            # print (ticker + ": " + str(currentValues[ticker]))
     except ValueError:
         continue
