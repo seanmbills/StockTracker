@@ -45,19 +45,15 @@ threads = []
 
 
 def main():
-    ## loop over stock abbreviations and get value from Yahoo
-    ## stock info
-    start = '2019-01-01'
-    end = datetime.now()
-
-
+    ## create threads to run each of the method that needs to check the current
+    ## valuation of stocks and update the current valuation of the user's
+    ## owned stocks
     updateStockValueProcess = Thread(target=updateStockValuations, args=[tickers, currentValues])
     updateStockValueProcess.start()
     threads.append(updateStockValueProcess)
     updateCurrentTotalValueProcess = Thread(target=updateCurrentTotalValuation, args=[currentValues, totalOwned, currentTotalValuation])
     updateCurrentTotalValueProcess.start()
     threads.append(updateCurrentTotalValueProcess)
-
 
 if __name__ == "__main__":
     main()
