@@ -6,6 +6,7 @@ import pandas as pd
 from pandas_datareader import data, wb
 from datetime import datetime
 from yahoo_fin import stock_info as si
+from utils import *
 
 ## get all of the stock exchanges we wish to work with
 # NYSE
