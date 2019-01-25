@@ -43,6 +43,11 @@ currentTotalValuation = 0.0
 ##      updating values in our dictionary)
 threads = []
 
+## track all of the stocks the user wants to keep an eye on
+##      stocks that are purchased should automatically be added to this list
+##      but selling a stock shouldn't remove it immediately
+watchlist = []
+
 
 def main():
     ## create threads to run each of the method that needs to check the current
