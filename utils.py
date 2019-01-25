@@ -53,7 +53,7 @@ def processUserInput(input, watchlist, totalOwned):
             return None
     if args[0] == "-rw" or args[0] == "-RW" or args[0] == "-rW" or args[0] == "-Rw":
         if len(args) == 2:
-            return processRemoveWatch(args[1], watchlist, totalOwned)
+            return processRemoveWatchRequest(args[1], watchlist, totalOwned)
         else:
             return None
     return None
@@ -69,7 +69,7 @@ def processWatchRequest(abbrev, lowSell, highSell, lowBuy, highBuy, watchlist):
                 watchlist[x] = order
         return "This stock is already in your watchlist! Updated your buy/sell thresholds with the new values."
 
-def processRemoveWatch(stock, watchlist, totalOwned):
+def processRemoveWatchRequest(stock, watchlist, totalOwned):
     if totalOwned[stock] == 0:
         for x in xrange(len(watchlist)):
             if watchlist[x].getAbbrev() == stock.upper():
