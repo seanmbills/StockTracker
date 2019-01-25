@@ -26,6 +26,34 @@ def addHistory(oldVal, newVal, history):
     history[ticker].append(priceChange)
     ## NEED TO IMPLEMENT LOGIC TO BUY/SELL-OFF STOCK
 
+def AsyncBuySellStock(totalOwned, individualPurchases, currentValues,
+    stockHistory, watchlist, availableFunds):
+    for ticker in watchlist:
+        ## first case is that we don't own a stock and its price is going up
+        ## which for now we want to mean an automatic buy (later will implement
+        ## logic to make sure we can afford the purchase)
+        history = stockHistory[ticker]
+        if ticker not in totalOwned.keys() and history[len(history) - 1] > 0:
+            ## BUY STOCK
+            currVal = currentValues[ticker]
+            if ticker not in stockHistory.keys():
+                stockHistory[ticker] = []
+            buyAmount = int(availableFunds/currVal)
+            totalOwned[ticker] += buyAmount
+            individualPurchases.append((ticker, buyAmount, currentValues[ticker]))
+            availableFunds -= buyAmount * currVal
+        ## next case is own stock and its price starts to dip in which case
+        ## we want to automatically sell (for now)
+        if ticker in totalOwned.keys() and history[len(history) - 1] < 0:
+            ## Sell stocks
+            ## update total owned to not include that key anymore
+            ## update individual purchases to not include any key dictionaries with
+            ##      that ticker name
+            ## later need to update the amount of money available to the algorithm
+            ##      by adding in the currentValue at the time of sale * # sold
+            ## possibly "clear" the stockHistory at this point??
+            pass
+
 def updateCurrentTotalValuation(currentValues, totalOwned, currentTotalValuation):
     while True:
         currentTotalValuation = 0.0
@@ -34,7 +62,7 @@ def updateCurrentTotalValuation(currentValues, totalOwned, currentTotalValuation
             print("Total Valuation: " + str(currentTotalValuation))
 
 def percentChanged(oldValue, newValue):
-    change = (oldValue - newValue) / oldValue
+    change = ((oldValue - newValue) / oldVal) * 100
     return change
 
 
