@@ -48,12 +48,15 @@ threads = []
 ##      but selling a stock shouldn't remove it immediately
 watchlist = []
 
+## track changes over time of the stock since last purchase/sell-off
+stockHistory = {}
+
 
 def main():
     ## create threads to run each of the method that needs to check the current
     ## valuation of stocks and update the current valuation of the user's
     ## owned stocks
-    updateStockValueProcess = Thread(target=updateStockValuations, args=[tickers, currentValues])
+    updateStockValueProcess = Thread(target=updateStockValuations, args=[tickers, currentValues, stockHistory])
     updateStockValueProcess.start()
     threads.append(updateStockValueProcess)
     updateCurrentTotalValueProcess = Thread(target=updateCurrentTotalValuation, args=[currentValues, totalOwned, currentTotalValuation])
