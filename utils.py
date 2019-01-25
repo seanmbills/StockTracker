@@ -4,19 +4,27 @@ from datetime import datetime
 from yahoo_fin import stock_info as si
 
 
-def updateStockValuations(tickers, currentValues):
+def updateStockValuations(tickers, currentValues, stockHistory):
     while True:
         for ticker in tickers:
             try:
                 ## just want the live price of the stock (since we aren't including
                 ##      any predictive features in yet based on past performance)
                 value = si.get_live_price(ticker)
-                if value is not None:
-                    priceChange = percentChanged(currentValues[ticker], value)
+                if value is not None and value != currentValues[ticker]:
+                    addHistory(currentValues[ticker], value, stockHistory)
+
                     currentValues[ticker] = value
                     print (ticker + ": " + str(currentValues[ticker]))
             except ValueError:
                 continue
+
+def addHistory(oldVal, newVal, history):
+    priceChange = percentChanged(currentValues[ticker], value)
+    if ticker not in history.keys():
+        history[ticker] = []
+    history[ticker].append(priceChange)
+    ## NEED TO IMPLEMENT LOGIC TO BUY/SELL-OFF STOCK
 
 def updateCurrentTotalValuation(currentValues, totalOwned, currentTotalValuation):
     while True:
@@ -26,8 +34,14 @@ def updateCurrentTotalValuation(currentValues, totalOwned, currentTotalValuation
             print("Total Valuation: " + str(currentTotalValuation))
 
 def percentChanged(oldValue, newValue):
-    change = (oldValue - newValue) / 100
+    change = (oldValue - newValue) / oldValue
     return change
+
+
+
+
+
+
 
 def processManualInput(watchlist):
     while True:
