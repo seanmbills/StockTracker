@@ -38,7 +38,9 @@ def AsyncBuySellStock(totalOwned, individualPurchases, currentValues,
             currVal = currentValues[ticker]
             if ticker not in stockHistory.keys():
                 stockHistory[ticker] = []
-            buyAmount = int(availableFunds/currVal)
+            ## for now just want to buy half of the stock we can afford,
+            ##      in order to save some capital for other stocks we come across
+            buyAmount = int(availableFunds/(currVal * 2))
             totalOwned[ticker] += buyAmount
             individualPurchases.append((ticker, buyAmount, currentValues[ticker]))
             availableFunds -= buyAmount * currVal
