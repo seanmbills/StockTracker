@@ -33,9 +33,9 @@ def AsyncBuySellStock(totalOwned, individualPurchases, currentValues,
         ## which for now we want to mean an automatic buy (later will implement
         ## logic to make sure we can afford the purchase)
         history = stockHistory[ticker]
-        if ticker not in totalOwned.keys() and history[len(history) - 1] > 0:
+        currVal = currentValues[ticker]
+        if ticker not in totalOwned.keys() and history[len(history) - 1] > 0 and currVal <= availableFunds:
             ## BUY STOCK
-            currVal = currentValues[ticker]
             if ticker not in stockHistory.keys():
                 stockHistory[ticker] = []
             ## for now just want to buy half of the stock we can afford,
