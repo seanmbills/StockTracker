@@ -30,14 +30,14 @@ currentValues = {}
 ## dictionary to track current owned stock
 ## Key: Stock Abbrev. Value: total # owned (across all purchase orders?)
 totalOwned = {}
-## dictionary to track individual purchases of a stock to price purchased at
-## Key: a dictionary of form:
-##      {Key: stock purchased
-##      Value: amount purchased in this purchase}
-## Value: price purchased at
-individualPurchases = {}
+## a list of tuples of the form:
+## (stock purchased aka ticker, number purchased, price purchased at)
+individualPurchases = []
 ## keeps track of valuation of current stocks:
 currentTotalValuation = 0.0
+## keeps track of the current available funds that the algorithm has at
+## its disposal
+availableFunds = 1000.0
 
 ## track the running threads (each executing a different function for reading/
 ##      updating values in our dictionary)
@@ -62,6 +62,9 @@ def main():
     updateCurrentTotalValueProcess = Thread(target=updateCurrentTotalValuation, args=[currentValues, totalOwned, currentTotalValuation])
     updateCurrentTotalValueProcess.start()
     threads.append(updateCurrentTotalValueProcess)
+    buyStockProcess = Thread(target=AsyncBuySellStock, args=[totalOwned, individualPurchases, currentValues, stockHistory, watchlist, availableFunds])
+    buyStockProcess.start()
+    threads.append(buyStockProcess)
 
 if __name__ == "__main__":
     main()
